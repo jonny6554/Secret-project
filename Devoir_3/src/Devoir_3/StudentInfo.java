@@ -21,7 +21,7 @@ public class StudentInfo {
         System.out
                 .println("*          		Laboratoire 1 et Laboratoire 2         	 *");//Test push
         System.out
-                .println("*           ITI 1521A (PROF: NATHALIE JAPKOWICZ)           *");//Make change
+                .println("*           ITI 1521A (PROF: NATHALIE JAPKOWICZ)           *");//Make change. Again.
         System.out
                 .println("************************************************************");
         System.out.println();
