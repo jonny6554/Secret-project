@@ -19,7 +19,7 @@ public class StudentInfo {
         System.out
                 .println("*          7710257        et      7377180                  *");
         System.out
-                .println("*          		Laboratoire 1 et Laboratoire 2         	 *");
+                .println("*          		Laboratoire 1 et Laboratoire 2         	 *");//Test push
         System.out
                 .println("*           ITI 1521A (PROF: NATHALIE JAPKOWICZ)           *");
         System.out
