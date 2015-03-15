@@ -10,7 +10,7 @@ public class StudentInfo {
      * Displays the student information: student name, id, section, etc. You
      * must fill this information inside the box.
      */
-    public static void display() {
+    public static void display() {//TEst2
 
         System.out
                 .println("************************************************************");
