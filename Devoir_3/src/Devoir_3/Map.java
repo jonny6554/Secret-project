@@ -21,7 +21,7 @@ public interface Map<K,V> {
 	 * @param key la clé est associé à une valeur.
 	 * @return on retourne la valeur associé à la clé donnée
 	 * @throws NoSuchElementException est généré lorsqu'aucun valeur est associé à la clé.
-	 * @throws NullPointerException est généré lorsque la clé spécifié est null.
+//	 * @throws NullPointerException est généré lorsque la clé spécifié est null.
 	 */
 	public abstract V get(K key)throws NoSuchElementException, NullPointerException;
 	
@@ -30,15 +30,16 @@ public interface Map<K,V> {
 	 * 
 	 * @param key est la clé est associé à une valeur.
 	 * @return est vrai seulement s'il existe une association pour la clé donnée
+	 * @throws NullPointerException si la clé spécifié est null.
 	 */
-	public abstract boolean contains(K key);
+	public abstract boolean contains(K key) throws NullPointerException;
 	
 	/**
 	 * Crée une nouvelle association clé-valeur.
 	 * 
 	 * @param key est la clé qui sera associé à la valeur donnée
 	 * @param value est la valeur qui sera associé à la clé donné.
-	 * @throws NullPointerException
+	 * @throws NullPointerException si la clé spécifié est null.
 	 */
 	public abstract void put(K key, V value) throws NullPointerException;
 	
@@ -49,8 +50,9 @@ public interface Map<K,V> {
 	 * @param key est la clé pour laquelle la valeur sera remplacé
 	 * @param value est la nouvelle valeur à associé au clé.
 	 * @throws NoSuchElementException est généré lorsqu'il n'y a pas de clé existent que l'on peut remplacer.
+	 * @throws NullPointerException est généré si la clé spécifié est null.
 	 */
-	public abstract void replace(K key, V value) throws NoSuchElementException;
+	public abstract void replace(K key, V value) throws NoSuchElementException, NullPointerException;
 	
 	/**
 	 * Cette méthode permet d'enlevé la valeur associé à une clé.
@@ -58,6 +60,8 @@ public interface Map<K,V> {
 	 * 
 	 * @param key est la clé pour laquelle l'association sera enlevé.
 	 * @return la valeur qui vient d'être enlevé.
+	 * @throws NoSuchElementException  est généré lorsqu'il n'y a pas de clé existent que l'on peut enlever.
+	 * @throws NullPointerException est généré si la clé spécifié est null.
 	 */
-	public abstract  V remove(K key);
+	public abstract  V remove(K key) throws NoSuchElementException, NullPointerException;
 }
