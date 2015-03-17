@@ -33,6 +33,7 @@ public class Dictionary implements Map<String, Token> {
 	 * Retourne la valeur associé à la clé spécifiée.
 	 * Dans le cas d'un conflit, elle retourne la valeur la plus à gauche.
 	 * 
+	 *
 	 * @param key : symbole lu dans le programme de Luka
 	 * @throws NoSuchElementException : lance l'exception si le token recherché n'existe pas
 	 * @throws NullPointerException : lance l'exception si le key est null
@@ -94,6 +95,7 @@ public class Dictionary implements Map<String, Token> {
 	/**
 	 * Crée une nouvelle association clé-valeur.
 	 * 
+	 *
 	 * @param String : symbole lu dans le programme de Luka
 	 * @param Token : la valeur lue dans le programme de Luka
 	 * @throws NullPointerException  : lance l'exception si la clé est null.
@@ -156,6 +158,7 @@ public class Dictionary implements Map<String, Token> {
 	}
 
 	@Override
+
 	/**
 	 * Cette méthode permet d'enlevé la valeur associé à une clé.
 	 * Dans le cas d'un conflit, elle enlève la valeur la plus à gauche.
@@ -176,7 +179,6 @@ public class Dictionary implements Map<String, Token> {
 		}
 		return null;
 	}
-
 	/**
 	 * Cette classe emmagasine une association String-Token. Elle est utilisé en
 	 * tant que paramètre de la classe pour emmagasiné l'association des
