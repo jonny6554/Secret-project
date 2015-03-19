@@ -76,7 +76,7 @@ public class Interpreter {
 	 *            the graphics context.
 	 */
 
-	public void execute(String program, Graphics g) {
+	public void execute(String program, Graphics g) throws LukasSyntaxException{
 
 		reset();
 
@@ -85,6 +85,8 @@ public class Interpreter {
 		g.setColor(gsColor);
 
 		while (r.hasMoreTokens()) {
+			
+			try{
 
 			Token t = r.nextToken();
 
@@ -107,6 +109,8 @@ public class Interpreter {
 					execute_quotedSymbol(Variable);
 				} else if (dictionary.contains(t.getSymbol())) {
 					execute_symbolEvaluation();
+				} else if(!dictionary.contains(t.getSymbol())){
+					throw new LukasSyntaxException(t.getSymbol()+" not found");
 				}
 
 			} else if (t.getSymbol().equals("undef")) {
@@ -170,6 +174,9 @@ public class Interpreter {
 				System.err.println("ILLEGAL SYMBOL: " + t);
 
 			}
+		}catch(LukasSyntaxException e1){
+			
+		}
 		}
 
 	}
