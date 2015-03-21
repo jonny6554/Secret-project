@@ -18,7 +18,7 @@ import java.util.NoSuchElementException;
 public class Dictionary implements Map<String, Token> {
 
 	/**
-	 * L'atribut dictionnaire contient les paires d'associatoins.
+	 * L'atribut dictionnaire contient les paires d'associations.
 	 */
 	private Pair[] dictionary;
 	
@@ -50,7 +50,7 @@ public class Dictionary implements Map<String, Token> {
 		for (int i = 0; i < dictionary.length; i++)
 			dictionary[i] = new Pair();
 	}
-
+	
 	@Override
 	/**
 	 * Retourne la valeur associé à la clef spécifiée.
@@ -112,7 +112,7 @@ public class Dictionary implements Map<String, Token> {
 		try {
 			if (key != null){
 				for (int i = numberOfElements - 1; i >=0; i--)
-					if (dictionary[i].key == key)
+					if (dictionary[i].key.equals(key))
 						resultat = true;
 			}
 			else //La clef est null
