@@ -1,6 +1,7 @@
 package Devoir_3;
 
 import java.awt.*;
+import java.awt.event.WindowEvent;
 
 /**
  * Luka Virtual Machine (LVM) -- An interpreter for the Luka programming
@@ -39,6 +40,10 @@ public class Interpreter {
 	 * Instance variable. Color of the pen.
 	 */
 	private Color gsColor;
+	
+	private String[] keys;
+
+	private String text, charac;
 
 	/**
 	 * Initializes this newly created interpreter so that the operand stack is
@@ -76,7 +81,7 @@ public class Interpreter {
 	 *            the graphics context.
 	 */
 
-	public void execute(String program, Graphics g) throws LukasSyntaxException{
+	public void execute(String program, Graphics g) throws LukasSyntaxException {
 
 		reset();
 
@@ -85,98 +90,102 @@ public class Interpreter {
 		g.setColor(gsColor);
 
 		while (r.hasMoreTokens()) {
-			
-			try{
 
-			Token t = r.nextToken();
+			try {
 
-			/**
-			 * vérifie si le token est un symbole. Si oui, il évalue si le symbole est
-			 * un symbole nommé, et si oui une valeur lui est attribuée. Si le symbole  
-			 * déjà dans le dictionnaire, on appelle la méthode execute_symbolEvaluation.
-			 */
-			if (t.isNumber()) {
+				Token t = r.nextToken();
 
-				operands.push(t);
+				if (!t.isNumber()) {
 
-			} else if (t.isSymbol()) {
+					text = t.getSymbol();
 
-				String text = t.getSymbol();
+					charac = Character.toString(text.charAt(0));
+				}
+				/**
+				 * vérifie si le token est un symbole. Si oui, il évalue si le
+				 * symbole est un symbole nommé, et si oui une valeur lui est
+				 * attribuée. Si le symbole déjà dans le dictionnaire, on
+				 * appelle la méthode execute_symbolEvaluation.
+				 */
+				if (t.isNumber()) {
 
-				if (Character.toString(text.charAt(0)) == "/"
-						&& text.length() < 3) {
+					operands.push(t);
+
+				} else if (charac.equals("/") && text.length() < 3) {
+					
 					String Variable = Character.toString(text.charAt(1));
 					execute_quotedSymbol(Variable);
-				} else if (dictionary.contains(t.getSymbol())) {
+					
+				} else if (dictionary.contains(text)) {
+					
+					operands.push(t);
+					
 					execute_symbolEvaluation();
-				} else if(!dictionary.contains(t.getSymbol())){
-					throw new LukasSyntaxException(t.getSymbol()+" not found");
+
+				} else if (t.getSymbol().equals("undef")) {
+
+					execute_undef();
+
+				} else if (t.getSymbol().equals("def")) {
+
+					execute_def();
+
+				} else if (t.getSymbol().equals("set")) {
+
+					execute_set();
+
+				} else if (t.getSymbol().equals("add")) {
+
+					execute_add();
+
+				} else if (t.getSymbol().equals("sub")) {
+
+					execute_sub();
+
+				} else if (t.getSymbol().equals("mul")) {
+
+					execute_mul();
+
+				} else if (t.getSymbol().equals("div")) {
+
+					execute_div();
+
+				} else if (t.getSymbol().equals("pop")) {
+
+					execute_pop();
+
+				} else if (t.getSymbol().equals("clear")) {
+
+					execute_clear();
+
+				} else if (t.getSymbol().equals("pstack")) {
+
+					execute_pstack();
+
+				} else if (t.getSymbol().equals("moveto")) {
+
+					execute_moveto();
+
+				} else if (t.getSymbol().equals("lineto")) {
+
+					execute_lineto(g);
+
+				} else if (t.getSymbol().equals("arc")) {
+
+					execute_arc(g);
+
+				} else if (t.getSymbol().equals("quit")) {
+
+					execute_quit();
+
+				} else {
+
+					System.err.println("ILLEGAL SYMBOL: " + t);
+
 				}
-
-			} else if (t.getSymbol().equals("undef")) {
-
-				execute_undef();
-
-			} else if (t.getSymbol().equals("def")) {
-
-				execute_def();
-
-			} else if (t.getSymbol().equals("set")) {
-
-				execute_set();
-
-			} else if (t.getSymbol().equals("add")) {
-
-				execute_add();
-
-			} else if (t.getSymbol().equals("sub")) {
-
-				execute_sub();
-
-			} else if (t.getSymbol().equals("mul")) {
-
-				execute_mul();
-
-			} else if (t.getSymbol().equals("div")) {
-
-				execute_div();
-
-			} else if (t.getSymbol().equals("pop")) {
-
-				execute_pop();
-
-			} else if (t.getSymbol().equals("clear")) {
-
-				execute_clear();
-
-			} else if (t.getSymbol().equals("pstack")) {
-
-				execute_pstack();
-
-			} else if (t.getSymbol().equals("moveto")) {
-
-				execute_moveto();
-
-			} else if (t.getSymbol().equals("lineto")) {
-
-				execute_lineto(g);
-
-			} else if (t.getSymbol().equals("arc")) {
-
-				execute_arc(g);
-
-			} else if (t.getSymbol().equals("quit")) {
-
-				execute_quit();
-
-			} else {
-
-				System.err.println("ILLEGAL SYMBOL: " + t);
-
+			} catch (LukasSyntaxException e1) {
+				System.out.println(e1.getMessage());
 			}
-		}catch(LukasSyntaxException e1){
-			
-		}
 		}
 
 	}
@@ -189,22 +198,23 @@ public class Interpreter {
 	}
 
 	private void execute_def() {
-		Token Symbol = operands.pop();
 		Token Value = operands.pop();
+		Token Symbol = operands.pop();
 
 		dictionary.put(Symbol.getSymbol(), Value);
 	}
 
 	private void execute_symbolEvaluation() {
 		Token Symbol = operands.pop();
-
-		dictionary.get(Symbol.getSymbol());
+		
+		operands.push(dictionary.get(Symbol.getSymbol()));
 	}
 
-	private void execute_set() {
+	private void execute_set() throws LukasSyntaxException{
 		Token newValue = operands.pop();
-
-		dictionary.replace(newValue.getSymbol(), newValue);
+		Token Symbol = operands.pop();
+		
+		dictionary.replace(Symbol.getSymbol(), newValue);
 
 	}
 
