@@ -111,9 +111,13 @@ public class Interpreter {
 
 					operands.push(t);
 
-				} else if (charac.equals("/") && text.length() < 3) {
+				} else if (charac.equals("/")) {
 					
-					String Variable = Character.toString(text.charAt(1));
+					String Variable="";
+					
+					for (int i = 1; i<text.length();i++){
+					Variable = Variable + new StringBuilder().append(text.charAt(i)).toString();
+					}
 					execute_quotedSymbol(Variable);
 					
 				} else if (dictionary.contains(text)) {
@@ -185,6 +189,7 @@ public class Interpreter {
 				}
 			} catch (LukasSyntaxException e1) {
 				System.out.println(e1.getMessage());
+				execute_quit();
 			}
 		}
 
@@ -214,6 +219,9 @@ public class Interpreter {
 		Token newValue = operands.pop();
 		Token Symbol = operands.pop();
 		
+		if (dictionary.get(Symbol.getSymbol()).getNumber() == 0){
+			throw new LukasSyntaxException("LukasSyntaxException : " + Symbol.getSymbol() + " not found : caught LukasSyntaxException");
+		}
 		dictionary.replace(Symbol.getSymbol(), newValue);
 
 	}
