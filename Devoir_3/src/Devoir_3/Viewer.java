@@ -100,15 +100,10 @@ public class Viewer extends JFrame implements ActionListener {
 	 */
 	public void actionPerformed(ActionEvent e) {
 
-		try {
-
-			if (e.getSource() == bExecute) {
-				display.repaint();
-			}
-			
-		} catch (LukasSyntaxException e1) {
-			this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+		if (e.getSource() == bExecute) {
+			display.repaint();
 		}
+
 	}
 
 	/**

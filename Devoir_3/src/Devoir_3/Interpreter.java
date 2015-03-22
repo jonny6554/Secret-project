@@ -40,8 +40,6 @@ public class Interpreter {
 	 * Instance variable. Color of the pen.
 	 */
 	private Color gsColor;
-	
-	private String[] keys;
 
 	private String text, charac;
 
@@ -101,29 +99,34 @@ public class Interpreter {
 
 					charac = Character.toString(text.charAt(0));
 				}
-				/**
-				 * vérifie si le token est un symbole. Si oui, il évalue si le
-				 * symbole est un symbole nommé, et si oui une valeur lui est
-				 * attribuée. Si le symbole déjà dans le dictionnaire, on
-				 * appelle la méthode execute_symbolEvaluation.
-				 */
+
 				if (t.isNumber()) {
 
 					operands.push(t);
 
+					/**
+					 * vérifie si le premier caractère du token est "/". Si oui,
+					 * la méthode execute_quotedSymbol est appelée.
+					 */
 				} else if (charac.equals("/")) {
-					
-					String Variable="";
-					
-					for (int i = 1; i<text.length();i++){
-					Variable = Variable + new StringBuilder().append(text.charAt(i)).toString();
+
+					String Variable = "";
+
+					for (int i = 1; i < text.length(); i++) {
+						Variable = Variable
+								+ new StringBuilder().append(text.charAt(i))
+										.toString();
 					}
 					execute_quotedSymbol(Variable);
-					
+
+					/** 
+					 * vérifie si le dictionnaire contient le symbole spécifié. si oui, execute_symboleEvaluation est appelée
+					 */
+
 				} else if (dictionary.contains(text)) {
-					
+
 					operands.push(t);
-					
+
 					execute_symbolEvaluation();
 
 				} else if (t.getSymbol().equals("undef")) {
@@ -184,10 +187,31 @@ public class Interpreter {
 
 				} else {
 
-					System.err.println("ILLEGAL SYMBOL: " + t);
+					throw new LukasSyntaxException("ILLEGAL SYMBOL: " + t);
 
 				}
+				
+				/**
+				 * attrape l'exception LukasSyntaxException et affiche un message d'erreur. De plus, la fenêtre est fermée.
+				 */
 			} catch (LukasSyntaxException e1) {
+
+				String pairs = "{elems = [";
+
+				for (int i = 0; i < dictionary.getLengthOfDictionary(); i++) {
+					pairs = pairs + "{key =" + dictionary.getkey(i)
+							+ ", value = " + dictionary.getValue(i).getNumber()
+							+ "}";
+					if (i < dictionary.getLengthOfDictionary() - 1) {
+						pairs = pairs + ",";
+					}
+
+				}
+
+				pairs = pairs + "]}";
+
+				System.out.println(pairs);
+				System.out.println(operands);
 				System.out.println(e1.getMessage());
 				execute_quit();
 			}
@@ -197,11 +221,23 @@ public class Interpreter {
 
 	// -----------------------------------------------------
 
+	/**
+	 * prend le symbole sans "/" et le pousse sur la pile
+	 * 
+	 * @param m
+	 *            : la clé qui sera la référence dans le dictionnaire. Elle
+	 *            n'est cepandant pas mise dans le dictionnaire dans cette
+	 *            méthode
+	 */
 	private void execute_quotedSymbol(String m) {
 		Token symbol = new Token(m);
 		operands.push(symbol);
 	}
 
+	/**
+	 * retire les deux éléments sur le dessus de la pile et les insère dans le
+	 * dictionnaire
+	 */
 	private void execute_def() {
 		Token Value = operands.pop();
 		Token Symbol = operands.pop();
@@ -209,23 +245,45 @@ public class Interpreter {
 		dictionary.put(Symbol.getSymbol(), Value);
 	}
 
-	private void execute_symbolEvaluation() {
+	/**
+	 * évalue la valeur du symbole sur le dessus de la pile
+	 * 
+	 * @throws LukasSyntaxException
+	 */
+	private void execute_symbolEvaluation() throws LukasSyntaxException {
 		Token Symbol = operands.pop();
-		
+
+		if (!Symbol.isSymbol()) {
+			throw new LukasSyntaxException("LukasSyntaxException : "
+					+ Symbol.getSymbol()
+					+ " not found : caught LukasSyntaxException");
+		}
+
 		operands.push(dictionary.get(Symbol.getSymbol()));
 	}
 
-	private void execute_set() throws LukasSyntaxException{
+	/**
+	 * retire les deux éléments sur le dessus de la pile et remplace la valeur
+	 * de cet élément dans le dictionnaire par la valeur donnée
+	 * 
+	 * @throws LukasSyntaxException
+	 */
+	private void execute_set() throws LukasSyntaxException {
 		Token newValue = operands.pop();
 		Token Symbol = operands.pop();
-		
-		if (dictionary.get(Symbol.getSymbol()).getNumber() == 0){
-			throw new LukasSyntaxException("LukasSyntaxException : " + Symbol.getSymbol() + " not found : caught LukasSyntaxException");
+
+		if (dictionary.get(Symbol.getSymbol()) == null) {
+			throw new LukasSyntaxException("LukasSyntaxException : "
+					+ Symbol.getSymbol()
+					+ " not found : caught LukasSyntaxException");
 		}
 		dictionary.replace(Symbol.getSymbol(), newValue);
 
 	}
 
+	/**
+	 * retire un l'élément spécifié du dictionnaire
+	 */
 	private void execute_undef() {
 
 		Token VariableToUndef = operands.pop();
