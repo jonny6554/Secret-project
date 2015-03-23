@@ -200,39 +200,16 @@ public class Interpreter {
 			} catch (NoSuchElementException e1) {
 
 				String message;
-				String pairs = "{elems = [";
-
-				for (int i = 0; i < dictionary.getLengthOfDictionary(); i++) {
-					pairs = pairs + "{key =" + dictionary.getkey(i)
-							+ ", value = " + dictionary.getValue(i).getNumber()
-							+ "}";
-					if (i < dictionary.getLengthOfDictionary() - 1) {
-						pairs = pairs + ",";
-					}
-				}
-				pairs = pairs + "]}";
-
-				message = e1.getMessage() + "\n" + pairs + "\n" + operands.toString() + "\n" + "LukasSyntaxException : " + dictionary.getErrorKey() + " not found : caught LukasSyntaxException";
+			
+				message = e1.getMessage() + "\n" + writePairs() + "\n" + operands.toString() + "\n" + "LukasSyntaxException : " + dictionary.getErrorKey() + " not found : caught LukasSyntaxException";
 
 				throw new LukasSyntaxException(message);
 				
 			} catch (NullPointerException e2) {
 
 				String message;
-				String pairs = "{elems = [";
-
-				for (int i = 0; i < dictionary.getLengthOfDictionary(); i++) {
-					pairs = pairs + "{key =" + dictionary.getkey(i)
-							+ ", value = " + dictionary.getValue(i).getNumber()
-							+ "}";
-					if (i < dictionary.getLengthOfDictionary() - 1) {
-						pairs = pairs + ",";
-					}
-				}
-
-				pairs = pairs + "]}";
-
-				message = e2.getMessage() + "\n" + pairs + "\n" + operands.toString() + "\n" + "LukasSyntaxException : " + dictionary.getErrorKey() + " not found : caught LukasSyntaxException";
+				
+				message = e2.getMessage() + "\n" + writePairs() + "\n" + operands.toString() + "\n" + "LukasSyntaxException : " + dictionary.getErrorKey() + " not found : caught LukasSyntaxException";
 
 				throw new LukasSyntaxException(message);
 
@@ -241,6 +218,24 @@ public class Interpreter {
 		}
 
 	}
+	
+	public String writePairs(){
+		String pairs = "{elems = [";
+
+		for (int i = 0; i < dictionary.getLengthOfDictionary(); i++) {
+			pairs = pairs + "{key =" + dictionary.getkey(i)
+					+ ", value = " + dictionary.getValue(i).getNumber()
+					+ "}";
+			if (i < dictionary.getLengthOfDictionary() - 1) {
+				pairs = pairs + ",";
+			}
+		}
+		
+		pairs = pairs + "]}";
+		
+		return pairs;
+	}
+	
 
 	// -----------------------------------------------------
 
