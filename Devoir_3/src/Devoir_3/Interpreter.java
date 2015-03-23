@@ -2,6 +2,7 @@ package Devoir_3;
 
 import java.awt.*;
 import java.awt.event.WindowEvent;
+import java.util.NoSuchElementException;
 
 /**
  * Luka Virtual Machine (LVM) -- An interpreter for the Luka programming
@@ -119,8 +120,9 @@ public class Interpreter {
 					}
 					execute_quotedSymbol(Variable);
 
-					/** 
-					 * vérifie si le dictionnaire contient le symbole spécifié. si oui, execute_symboleEvaluation est appelée
+					/**
+					 * vérifie si le dictionnaire contient le symbole spécifié.
+					 * si oui, execute_symboleEvaluation est appelée
 					 */
 
 				} else if (dictionary.contains(text)) {
@@ -187,15 +189,17 @@ public class Interpreter {
 
 				} else {
 
-					throw new LukasSyntaxException("ILLEGAL SYMBOL: " + t);
+					System.out.println("ILLEGAL SYMBOL: " + t);
 
 				}
-				
-				/**
-				 * attrape l'exception LukasSyntaxException et affiche un message d'erreur. De plus, la fenêtre est fermée.
-				 */
-			} catch (LukasSyntaxException e1) {
 
+				/**
+				 * attrape l'exception et lance l'exception LukasSyntaxException.
+				 */
+
+			} catch (NoSuchElementException e1) {
+
+				String message;
 				String pairs = "{elems = [";
 
 				for (int i = 0; i < dictionary.getLengthOfDictionary(); i++) {
@@ -205,16 +209,35 @@ public class Interpreter {
 					if (i < dictionary.getLengthOfDictionary() - 1) {
 						pairs = pairs + ",";
 					}
+				}
+				pairs = pairs + "]}";
 
+				message = e1.getMessage() + "\n" + pairs + "\n" + operands.toString() + "\n" + "LukasSyntaxException : " + dictionary.getErrorKey() + " not found : caught LukasSyntaxException";
+
+				throw new LukasSyntaxException(message);
+				
+			} catch (NullPointerException e2) {
+
+				String message;
+				String pairs = "{elems = [";
+
+				for (int i = 0; i < dictionary.getLengthOfDictionary(); i++) {
+					pairs = pairs + "{key =" + dictionary.getkey(i)
+							+ ", value = " + dictionary.getValue(i).getNumber()
+							+ "}";
+					if (i < dictionary.getLengthOfDictionary() - 1) {
+						pairs = pairs + ",";
+					}
 				}
 
 				pairs = pairs + "]}";
 
-				System.out.println(pairs);
-				System.out.println(operands);
-				System.out.println(e1.getMessage());
-				execute_quit();
+				message = e2.getMessage() + "\n" + pairs + "\n" + operands.toString() + "\n" + "LukasSyntaxException : " + dictionary.getErrorKey() + " not found : caught LukasSyntaxException";
+
+				throw new LukasSyntaxException(message);
+
 			}
+
 		}
 
 	}

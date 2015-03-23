@@ -28,6 +28,8 @@ public class Dictionary implements Map<String, Token> {
 	 * Indique le nombre d'éléments dans le dictionnaire.
 	 */
 	private int numberOfElements;
+	
+	private String errorKey;
 
 	/**
 	 * Contient la valeur pour initialisé l'attribut
@@ -73,7 +75,7 @@ public class Dictionary implements Map<String, Token> {
 								// trouvé
 
 		// Module
-		//try {
+		try {
 			if (key != null) {
 				for (int i = numberOfElements - 1; i >= 0; i--)
 					if (dictionary[i].key.equals(key)) {
@@ -81,7 +83,7 @@ public class Dictionary implements Map<String, Token> {
 						found = true;
 						break;
 					}
-			}/**else
+			}else
 				// La valeur est nul, alors on lance une exception.
 				throw new NullPointerException();
 			if (!found)
@@ -91,17 +93,23 @@ public class Dictionary implements Map<String, Token> {
 			System.out
 					.println("L'élément demandé n'existe pas; la clef est null. La méthode: get. "
 							+ "Contenu de la clef: " + key);
+			errorKey = key;
 			throw e1;
 		} catch (NullPointerException e2) {
 			System.out
 					.println("Il n'avait aucun élément associé au clef! La méthode: get. "
 							+ "Contenu de la clef:" + key);
+			errorKey = key;
 			throw e2;
 		}
-		*/
+		
 
 		// Retour de la variable résultat
 		return resultat;
+	}
+	
+	public String getErrorKey(){
+		return errorKey;
 	}
 	
 	public String getkey(int i){
@@ -140,6 +148,7 @@ public class Dictionary implements Map<String, Token> {
 			System.out
 					.println("La clef spécifié est null! Méthode: contains. Contenu de la clef: "
 							+ key);
+			errorKey = key;
 			throw e1;
 		}
 
@@ -176,6 +185,7 @@ public class Dictionary implements Map<String, Token> {
 			System.out
 					.println("La clef est null!  Méthode: put. Contenu de la clef: "
 							+ key + ". Contenu de la valeur: " + value + ".");
+			errorKey = key;
 			throw e2;
 		}
 
@@ -197,7 +207,7 @@ public class Dictionary implements Map<String, Token> {
 								// remplacer.
 
 		// Module
-		//try {
+		try {
 			if (key != null && value != null)
 				for (int i = numberOfElements - 1; i >= 0; i--) {
 					if (dictionary[i].key.equals(key)) {
@@ -206,7 +216,7 @@ public class Dictionary implements Map<String, Token> {
 						break;
 					}
 				}
-		/**	else
+		else
 				// La clef est null.
 				throw new NullPointerException();
 			if (!found)// Aucune valeur trouvée afin de remplacer.
@@ -215,14 +225,16 @@ public class Dictionary implements Map<String, Token> {
 			System.out
 					.println("L'élément demandé n'existaient pas! Méthode: replace. Contenu de la clef: "
 							+ key + ". Contenu de la valeur: " + value + ".");
+			errorKey = key;
 			throw e1;
 		} catch (NullPointerException e2) {
 			System.out
 					.println("La clef est null! Méthode: replace. Contenu de la clef: "
 							+ key + ". Contenu de la valeur: " + value + ".");
+			errorKey = key;
 			throw e2;
 		}
-		*/
+		
 	}
 
 	@Override
@@ -273,11 +285,13 @@ public class Dictionary implements Map<String, Token> {
 			System.out
 					.println("L'élément à enlevé n'existait pas! Méthode: remove. "
 							+ "Contenu de la clef: " + key);
+			errorKey = key;
 			throw e1;
 		} catch (NullPointerException e2) {
 			System.out
 					.println("La clef est null! Méthode: remove. Contenu de la clef: "
 							+ key);
+			errorKey = key;
 			throw e2;
 		}
 		// Retour de la variable résultat.

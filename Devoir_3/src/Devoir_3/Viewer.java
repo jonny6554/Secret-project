@@ -116,10 +116,14 @@ public class Viewer extends JFrame implements ActionListener {
 	 */
 	public void execute(Graphics g) {
 
+		try{
 		String program = input.getText();
 
 		lvm.execute(program, g);
-
+		}catch(LukasSyntaxException e){
+			System.out.println(e.getMessage());
+			System.exit(0);
+		}
 	}
 
 }
