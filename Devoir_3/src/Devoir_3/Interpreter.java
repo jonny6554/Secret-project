@@ -46,7 +46,7 @@ public class Interpreter {
 	/**
 	 * Crée un nouveau dictionnaire
 	 */
-	Dictionary dictionary;
+	private Dictionary dictionary;
 
 	/**
 	 * Initializes this newly created interpreter so that the operand stack is
