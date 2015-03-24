@@ -28,8 +28,6 @@ public class Dictionary implements Map<String, Token> {
 	 * Indique le nombre d'éléments dans le dictionnaire.
 	 */
 	private int numberOfElements;
-	
-	private String errorKey;
 
 	/**
 	 * Contient la valeur pour initialisé l'attribut
@@ -71,8 +69,7 @@ public class Dictionary implements Map<String, Token> {
 			NullPointerException {
 		// Déclaration des variables et dictionnaire des données
 		Token resultat = null; // Le résultat de la méthode.
-		boolean found = false; // true seulement si l'élément recherché a été
-								// trouvé
+		boolean found = false; // true seulement si l'élément recherché a été trouvé
 
 		// Module
 		try {
@@ -83,23 +80,14 @@ public class Dictionary implements Map<String, Token> {
 						found = true;
 						break;
 					}
-			}else
-				// La valeur est nul, alors on lance une exception.
-				throw new NullPointerException();
+			}else // La valeur est null, alors on lance une exception.
+				throw new NullPointerException(errorMessage("java.util.NullPointerException", key, null));
 			if (!found)
-				throw new NoSuchElementException();
+				throw new NoSuchElementException(errorMessage("java.util.NoSuchElementException", key, null));
 
 		} catch (NoSuchElementException e1) {
-			System.out
-					.println("L'élément demandé n'existe pas; la clef est null. La méthode: get. "
-							+ "Contenu de la clef: " + key);
-			errorKey = key;
 			throw e1;
 		} catch (NullPointerException e2) {
-			System.out
-					.println("Il n'avait aucun élément associé au clef! La méthode: get. "
-							+ "Contenu de la clef:" + key);
-			errorKey = key;
 			throw e2;
 		}
 		
@@ -108,20 +96,6 @@ public class Dictionary implements Map<String, Token> {
 		return resultat;
 	}
 	
-	public String getErrorKey(){
-		return errorKey;
-	}
-	
-	public String getkey(int i){
-		return dictionary[i].key;
-	}
-	public Token getValue(int i){
-		return dictionary[i].value;
-	}
-	
-	public int getLengthOfDictionary(){
-		return numberOfElements;
-	}
 
 	@Override
 	/**
@@ -141,14 +115,9 @@ public class Dictionary implements Map<String, Token> {
 				for (int i = numberOfElements - 1; i >= 0; i--)
 					if (dictionary[i].key.equals(key))
 						resultat = true;
-			} else
-				// La clef est null
-				throw new NullPointerException();
+			} else // La clef est null
+				throw new NullPointerException(errorMessage("java.util.NullPointerException", key, null));
 		} catch (NullPointerException e1) {
-			System.out
-					.println("La clef spécifié est null! Méthode: contains. Contenu de la clef: "
-							+ key);
-			errorKey = key;
 			throw e1;
 		}
 
@@ -179,13 +148,9 @@ public class Dictionary implements Map<String, Token> {
 				}
 			} else
 				// la clef ou la valeur est null
-				throw new NullPointerException();
+				throw new NullPointerException(errorMessage("java.util.NullPointerException", key, value));
 
 		} catch (NullPointerException e2) {
-			System.out
-					.println("La clef est null!  Méthode: put. Contenu de la clef: "
-							+ key + ". Contenu de la valeur: " + value + ".");
-			errorKey = key;
 			throw e2;
 		}
 
@@ -218,20 +183,12 @@ public class Dictionary implements Map<String, Token> {
 				}
 		else
 				// La clef est null.
-				throw new NullPointerException();
+				throw new NullPointerException(errorMessage("java.util.NullPointerException", key, value));
 			if (!found)// Aucune valeur trouvée afin de remplacer.
-				throw new NoSuchElementException();
+				throw new NoSuchElementException(errorMessage("java.util.NoSuchElementException", key, value));
 		} catch (NoSuchElementException e1) {
-			System.out
-					.println("L'élément demandé n'existaient pas! Méthode: replace. Contenu de la clef: "
-							+ key + ". Contenu de la valeur: " + value + ".");
-			errorKey = key;
 			throw e1;
 		} catch (NullPointerException e2) {
-			System.out
-					.println("La clef est null! Méthode: replace. Contenu de la clef: "
-							+ key + ". Contenu de la valeur: " + value + ".");
-			errorKey = key;
 			throw e2;
 		}
 		
@@ -254,44 +211,29 @@ public class Dictionary implements Map<String, Token> {
 		boolean found = false; // True ssi l'élément est trouvé.
 		// Module
 		try {
-
 			// Trouve la clef.
 			if (key != null) {
-				for (int i = numberOfElements - 1; i >= 0; i--) // On commence à
-																// chercher à
-																// l'élément
-																// ajouté le
-																// plus
-																// récemment.
+				for (int i = numberOfElements - 1; i >= 0; i--) 
 				{
 					if (dictionary[i].key.equals(key)) {
 						resultat = dictionary[i].value;
 						dictionary[i].value = null; // Essuyage.
 						dictionary[i].key = null;
 						--numberOfElements;
-						organizeStack(); // On enlève l'espace "null" créé, si
-											// c'est le cas.
+						organizeStack(); 
 						found = true;
 						break;
 					}
 				}
 			} else
 				// Alors la clef est null.
-				throw new NullPointerException();
+				throw new NullPointerException(errorMessage("java.util.NullPointerException", key, null));
 			if (!found)
-				throw new NoSuchElementException();
+				throw new NoSuchElementException(errorMessage("java.util.NoSuchElementException", key, null));
 
 		} catch (NoSuchElementException e1) {
-			System.out
-					.println("L'élément à enlevé n'existait pas! Méthode: remove. "
-							+ "Contenu de la clef: " + key);
-			errorKey = key;
 			throw e1;
 		} catch (NullPointerException e2) {
-			System.out
-					.println("La clef est null! Méthode: remove. Contenu de la clef: "
-							+ key);
-			errorKey = key;
 			throw e2;
 		}
 		// Retour de la variable résultat.
@@ -313,12 +255,10 @@ public class Dictionary implements Map<String, Token> {
 	 */
 	private void lengthenTheDictionary() {
 		// Déclaration des variables et dictionnaire des données.
-		Pair[] newDictionary = new Pair[dictionary.length // Nouvelle
-															// dictionnaire qui
-															// sera plus grand
-															// que le dernier
-				+ SIZE_ADDED_TO_FULL_DICTIONARY]; // Et remplacera l'actuel avec
-													// les mêmes valeurs.
+		//Nouvelle dictionnaire qui sera plus grand que le dernier et remplacera 
+		//l'actuel avec les mêmes valeurs.
+		Pair[] newDictionary = new Pair[dictionary.length 
+				+ SIZE_ADDED_TO_FULL_DICTIONARY]; 
 
 		// Module
 		// On associe les valeurs du dictionnaire actuel avec la nouvelle
@@ -343,31 +283,17 @@ public class Dictionary implements Map<String, Token> {
 
 		// Module
 		for (int i = 1; i < (dictionary.length - 1); i++) {
-			if (dictionary[0].key == null && dictionary[1].key != null) // Si la
-																		// première
-																		// clef
-																		// est
-																		// null.
+			//Si la première clef est null.
+			if (dictionary[0].key == null && dictionary[1].key != null) 
 			{
 				temp = dictionary[1];
 				dictionary[1] = dictionary[0];
 				dictionary[0] = temp;
 			}
 			// On vérifie que l'élément null trouvé n'est pas null des deux coté
-			// pour que l'on ne
-			// change pas les valeurs nulls.
-			if ((dictionary[i].key == null && dictionary[i - 1].key != null && dictionary[i + 1] != null)) { // On
-																												// fait
-																												// des
-																												// échanges
-																												// répétés
-																												// pour
-																												// mettre
-																												// le
-																												// null
-																												// à
-																												// la
-																												// fin
+			// pour que l'on n'échange pas les valeurs nulls.
+			if ((dictionary[i].key == null && dictionary[i - 1].key != null && dictionary[i + 1] != null)) {
+				//On fait des échanges répétés pour mettre le null à la fin.
 				for (int j = i + 1; j < dictionary.length; j++) {
 					temp = dictionary[j];
 					dictionary[j] = dictionary[j - 1];
@@ -375,5 +301,42 @@ public class Dictionary implements Map<String, Token> {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Cette méthode est appelée lorsqu'une erreur est lancée, soit 
+	 * un NullPointerException ou un NoSuchElementException.
+	 * Elle génère un dictionnaire contenant tout les valeurs à ce point.
+	 * 
+	 * @param errorType : indique le nom de l'erreur.
+	 * @param key : indique le nom de la clé qui a causé l'erreur.
+	 * @param value : indique la valeur qui a causé l'erreur (elle peut être null)
+	 * @return retourne un String représentant le dictionnaire.
+	 */
+	private String errorMessage(String errorType, String key, Token value){
+		//Déclaration des variables et dictionnaire des données
+		String resultat = errorType + ": key not found: " + key + "\n";
+		//Module
+		if (value != null )
+			 resultat += "Value associated to the key not found: " + value.toString() + " \n";
+		
+		//On imprime alors le dictionnaire
+		resultat += "Dictionary: {elems = [";
+		
+		if (dictionary != null && errorType != null)
+		for (int i = 0; i < numberOfElements; i++) {
+			if (dictionary[i] != null){
+			resultat = resultat + "{key =" + dictionary[i].key
+					+ ", value = " + dictionary[i].value
+					+ "}";
+			}
+			if (i < numberOfElements - 1) {
+				resultat = resultat + ",";
+			}
+		}
+		
+		resultat += "]}" + "\n";
+		//Retour de la variable résultat
+		return resultat;
 	}
 }
